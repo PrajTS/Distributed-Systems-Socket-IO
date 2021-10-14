@@ -1,0 +1,31 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-title>{{title}}</mat-card-title>
+    <div class="content-container">
+      <mat-card-content>
+        <div>
+          {{description}}
+        </div>
+        <p>Published by : {{publisherId}} (Publisher id)</p>
+        <a [href]="url" target="_blank" class="read-more-btn">
+          <button mat-stroked-button color="primary">Read more</button>
+        </a>
+      </mat-card-content>
+      <img [src]="image" mat-card-md-image>
+    </div>
+    <mat-card-actions>
+      <ng-container *ngIf="isPublisher">
+        <mat-form-field>
+          <mat-label>Channel</mat-label>
+          <mat-select [formControl]="channelFormControl">
+            <mat-option *ngFor="let channel of channels" [value]="channel">
+              {{channel}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button color="primary" (click)="publish(channelFormControl.value)">Publish</button>
+      </ng-container>
+    </mat-card-actions>
+  </mat-card>
+</div>

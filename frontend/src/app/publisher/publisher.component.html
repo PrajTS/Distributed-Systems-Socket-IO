@@ -1,0 +1,14 @@
+<h1>Publisher</h1>
+<div class="search">
+  <div>
+    <mat-form-field>
+      <input matInput placeholder="Search News" [formControl]="searchFormControl">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="searchNews()">Search</button>
+  </div>
+</div>
+
+<div *ngFor="let news of newsList">
+  <app-news [title]="news?.title" [description]="news?.description" [image]="news.image" [url]="news?.url"
+    [isPublisher]="true" (publishEV)="publishToServer($event, news)" [publisherId]="news.publisherId"></app-news>
+</div>

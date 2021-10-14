@@ -1,0 +1,30 @@
+.content-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  max-width: 1120px;
+}
+
+.card {
+  margin-bottom: 1rem;
+  background-color: #f7fafc;
+}
+
+mat-card-content {
+  flex-grow: 1;
+}
+
+mat-card-actions {
+  margin-left: 1rem;
+}
+
+.read-more-btn {
+  margin-top: 1rem;
+  display: block;
+}
