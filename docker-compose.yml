@@ -1,4 +1,4 @@
-version: "3" # specify docker-compose version
+version: "3.8" # specify docker-compose version
 
 # Define the services/containers to be run
 services:
@@ -10,8 +10,7 @@ services:
       - "3000:3000"
     container_name: node-api
     volumes:
-      - ./api:/usr/src/app/api
-      - /usr/src/app/api/node_modules
+      - ./api:/api
     depends_on:
       - mongo
     networks:
@@ -25,8 +24,7 @@ services:
       - "4200:4200"
     container_name: angular-ui
     volumes:
-      - ./frontend:/usr/src/app/frontend
-      - /usr/src/app/frontend/node_modules
+      - ./frontend:/app
     networks:
       - webnet
 
