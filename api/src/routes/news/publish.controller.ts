@@ -7,10 +7,10 @@ export const searchNewsController = async (
   request: Request,
   response: Response
 ) => {
-  const { newsList, channel } = request.body;
+  const { newsList, channel, publisherId } = request.body;
   let responseObj: IApiResponse;
   try {
-    responseObj = await publishNews(newsList, channel);
+    responseObj = await publishNews(newsList, channel, publisherId);
   } catch (e) {
     responseObj = getDefaultApiErrors(e);
   }
