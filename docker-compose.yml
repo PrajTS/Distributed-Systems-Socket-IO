@@ -1,0 +1,45 @@
+version: "3" # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  nodejs-server:
+    build:
+      context: ./api
+      dockerfile: debug.dockerfile
+    ports:
+      - "3000:3000"
+    container_name: node-api
+    volumes:
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
+    depends_on:
+      - mongo
+    networks:
+      - webnet
+
+  angular-ui:
+    build:
+      context: ./frontend
+      dockerfile: debug.dockerfile
+    ports:
+      - "4200:4200"
+    container_name: angular-ui
+    volumes:
+      - ./frontend:/usr/src/app/frontend
+      - /usr/src/app/frontend/node_modules
+    networks:
+      - webnet
+
+  mongo: # name of the third service
+    image: mongo # specify image to build container from
+    container_name: mongo
+    volumes:
+      - ./mongo:/home/mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge

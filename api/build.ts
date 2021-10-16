@@ -24,12 +24,12 @@ logger.timestamp = false;
     // Remove current build
     await remove("./dist/");
     // Copy production env file
-    if (options.env !== "production") {
-      await copy(
-        `./src/pre-start/env/${options.env}.env`,
-        `./dist/pre-start/env/${options.env}.env`
-      );
-    }
+    // if (options.env !== "production") {
+    //   await copy(
+    //     `./src/pre-start/env/${options.env}.env`,
+    //     `./dist/pre-start/env/${options.env}.env`
+    //   );
+    // }
     // Copy back-end files
     await exec("tsc --build tsconfig.prod.json", "./");
   } catch (err) {

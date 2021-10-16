@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  channels: ['ai', 'ml', 'dl'],
+  channels: ['Artificial Intelligence', 'Machine Learning', 'Deep Learning'],
 };
 
 export default CONSTANTS;

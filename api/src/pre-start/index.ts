@@ -18,12 +18,12 @@ import commandLineArgs from "command-line-args";
     },
   ]);
   // Set the env file
-  if (options.env !== "production") {
-    const result2 = dotenv.config({
-      path: path.join(__dirname, `env/${options.env as string}.env`),
-    });
-    if (result2.error) {
-      throw result2.error;
-    }
-  }
+  // if (options.env !== "production") {
+  //   const result2 = dotenv.config({
+  //     path: path.join(__dirname, `env/${options.env as string}.env`),
+  //   });
+  //   if (result2.error) {
+  //     throw result2.error;
+  //   }
+  // }
 })();
