@@ -25,13 +25,14 @@ export class SubscriberComponent implements OnInit, OnDestroy {
   toogleSubscribe() {
     if (this.channelFormControl.value) {
       if (!this.isSubscribing) {
+        console.log(this.channelFormControl.value)
         this.subscriber = this.webSocketService
           .listen(this.channelFormControl.value)
           .subscribe((data) => {
             this.newsList = [JSON.parse(data as string), ...this.newsList];
           });
         this.webSocketService
-          .listenOnce()
+          .listenOnce(this.channelFormControl.value)
           .subscribe((news) => (this.newsList = news as any[]));
       } else {
         this.webSocketService.stopListening();

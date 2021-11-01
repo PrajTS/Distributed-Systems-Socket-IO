@@ -2,13 +2,39 @@ version: "3" # specify docker-compose version
 
 # Define the services/containers to be run
 services:
-  nodejs-server:
+  nodejs-server-1:
     build:
       context: ./api
       dockerfile: debug.dockerfile
     ports:
       - "3000:3000"
-    container_name: node-api
+    container_name: node-api-1
+    volumes:
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
+    depends_on:
+      - mongo
+
+  nodejs-server-2:
+    build:
+      context: ./api
+      dockerfile: debug.dockerfile
+    ports:
+      - "3001:3000"
+    container_name: node-api-2
+    volumes:
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
+    depends_on:
+      - mongo
+
+  nodejs-server-3:
+    build:
+      context: ./api
+      dockerfile: debug.dockerfile
+    ports:
+      - "3002:3000"
+    container_name: node-api-3
     volumes:
       - ./api:/usr/src/app/api
       - /usr/src/app/api/node_modules
