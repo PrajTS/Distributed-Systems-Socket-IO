@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import { CHANNEL_PORT_MAPPING } from './common.constants';
+import CONSTANTS, { CHANNEL_PORT_MAPPING } from './common.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +15,21 @@ export class WebSocketService {
     this.clientId = '' + Math.floor(1000 + Math.random() * 9000);
   }
 
-  connect(channel?: string) {
+  connect(channel: string, current = -1, left = CONSTANTS.channels.length - 1) {
     const uri = (channel && (CHANNEL_PORT_MAPPING as any)[channel]) || this.uri;
-    console.log(uri, channel);
-    this.socket = io(uri);
+    try {
+      this.socket = io(uri);
+    } catch (e) {
+      if (left > 0) {
+        if (current === -1) {
+          current = CONSTANTS.channels.indexOf(channel);
+        }
+        left--;
+        current = (current + 1) % (CONSTANTS.channels.length - 1);
+
+        this.connect(CONSTANTS.channels[current], current, left);
+      }
+    }
   }
 
   listen(channel: string) {
