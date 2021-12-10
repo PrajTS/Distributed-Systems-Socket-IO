@@ -13,18 +13,27 @@
       </mat-card-content>
       <img [src]="image" mat-card-md-image>
     </div>
-    <mat-card-actions>
+    <mat-card-actions >
       <ng-container *ngIf="isPublisher">
         <mat-form-field>
-          <mat-label>Channel</mat-label>
+          <mat-label>Topic</mat-label>
           <mat-select [formControl]="channelFormControl">
             <mat-option *ngFor="let channel of channels" [value]="channel">
               {{channel}}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        &nbsp;
+        <mat-form-field>
+          <mat-label>Partition</mat-label>
+          <mat-select [formControl]="partitionFormControl">
+            <mat-option *ngFor="let partition of partitions" [value]="partition">
+              {{partition}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-        <button mat-stroked-button color="primary" (click)="publish(channelFormControl.value)">Publish</button>
+        <button mat-stroked-button color="primary" (click)="publish(channelFormControl.value, partitionFormControl.value)">Publish</button>
       </ng-container>
     </mat-card-actions>
   </mat-card>

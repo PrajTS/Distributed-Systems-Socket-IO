@@ -14,17 +14,20 @@ export class NewsComponent implements OnInit {
   @Input() image: string = '';
   @Input() publisherId = '';
   @Input() isPublisher: boolean = false;
-  @Output() publishEV = new EventEmitter<string>();
+  @Output() publishEV = new EventEmitter<any>();
 
   channels = CONSTANTS.channels;
+  partitions = CONSTANTS.partitions;
 
   channelFormControl = new FormControl(this.channels[0]);
+  partitionFormControl = new FormControl(this.partitions[0]);
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  publish(channel: string) {
-    this.publishEV.emit(channel);
+  publish(channel: string, partition: number) {
+    console.log(channel, partition)
+    this.publishEV.emit({ channel, partition });
   }
 }

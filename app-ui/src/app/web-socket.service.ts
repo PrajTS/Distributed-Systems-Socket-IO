@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import CONSTANTS, { CHANNEL_PORT_MAPPING } from './common.constants';
+import CONSTANTS from './common.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -10,17 +10,18 @@ export class WebSocketService {
   socket: any;
   readonly uri = 'ws://localhost:3000';
   clientId: string = '';
+  subscriberUrl = '';
 
   constructor() {
     this.clientId = '' + Math.floor(1000 + Math.random() * 9000);
   }
 
-  connect(channel: string, current = -1, left = CONSTANTS.channels.length - 1) {
-    const uri = (channel && (CHANNEL_PORT_MAPPING as any)[channel]) || this.uri;
+  connect(channel?: string, current = -1, left = CONSTANTS.channels.length - 1) {
+    const uri = this.subscriberUrl;
     try {
       this.socket = io(uri);
     } catch (e) {
-      this.rendezvous(channel, current, left);
+      // this.rendezvous(channel, current, left);
     }
   }
 
@@ -36,14 +37,16 @@ export class WebSocketService {
     }
   }
 
-  listen(channel: string) {
-    this.connect(channel);
+  listen(selectedChannels: any[], subscriberUrl: string, ) {
+    this.subscriberUrl = subscriberUrl;
+    this.connect();
     this.socket.on('connect', () => {
-      this.socket.emit('__join__', channel, this.clientId);
+      this.socket.emit('__join__', selectedChannels, this.clientId);
     });
     return new Observable((subscriber) => {
-      this.socket.on(channel, (data: any) => {
-        subscriber.next(data);
+      this.socket.on(this.clientId, (data: any) => {
+        console.log(data)
+        subscriber.next(data.value);
       });
     });
   }

@@ -26,8 +26,14 @@ export class PublisherComponent implements OnInit, OnDestroy {
     });
   }
 
-  publishToServer(channel: string, news: any[]) {
-    this.webSocketService.emit(channel, JSON.stringify(news));
+  publishToServer({ channel, partition }: any, news: any[]) {
+    this.api.publishNews(
+      channel,
+      partition,
+      news,
+      this.webSocketService.clientId
+    ).subscribe();
+    // this.webSocketService.emit(channel, JSON.stringify(news));
   }
 
   ngOnDestroy() {}

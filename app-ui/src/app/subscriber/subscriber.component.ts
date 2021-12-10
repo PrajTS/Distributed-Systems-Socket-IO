@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import CONSTANTS from '../common.constants';
+import CONSTANTS, { SUBSCRIBER_MAPPING } from '../common.constants';
 import { WebSocketService } from '../web-socket.service';
 
 @Component({
@@ -10,29 +10,44 @@ import { WebSocketService } from '../web-socket.service';
   styleUrls: ['./subscriber.component.scss'],
 })
 export class SubscriberComponent implements OnInit, OnDestroy {
-  channels = CONSTANTS.channels;
-  channelFormControl = new FormControl(this.channels[0]);
+  topics = CONSTANTS.channels;
+  partitions = CONSTANTS.partitions;
+  subscriberMap = SUBSCRIBER_MAPPING;
+
+  topicFormControl = new FormControl(this.topics[0]);
+  partitionFormControl = new FormControl(this.partitions[0]);
+
+  subscriberUrlFormControl = new FormControl(
+    this.subscriberMap['Subscriber 1']
+  );
+
   isSubscribing = false;
 
   subscriber: any;
 
   newsList: any[] = [];
 
+  selectedTopics: { topic: string; partition: number }[] = [];
+
   constructor(private webSocketService: WebSocketService) {}
 
   ngOnInit(): void {}
 
   toogleSubscribe() {
-    if (this.channelFormControl.value) {
+    if (this.selectedTopics.length) {
       if (!this.isSubscribing) {
-        console.log(this.channelFormControl.value)
+        this.newsList = []
         this.subscriber = this.webSocketService
-          .listen(this.channelFormControl.value)
+          .listen(
+            this.selectedTopics,
+            this.subscriberUrlFormControl.value
+          )
           .subscribe((data) => {
+            console.log(data)
             this.newsList = [JSON.parse(data as string), ...this.newsList];
           });
         this.webSocketService
-          .listenOnce(this.channelFormControl.value)
+          .listenOnce(this.topicFormControl.value)
           .subscribe((news) => (this.newsList = news as any[]));
       } else {
         this.webSocketService.stopListening();
@@ -46,5 +61,24 @@ export class SubscriberComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.webSocketService.stopListening();
+  }
+
+  add() {
+    if (
+      !this.selectedTopics.find(
+        ({ topic, partition }) =>
+          topic === this.topicFormControl.value &&
+          partition === this.partitionFormControl.value
+      )
+    ) {
+      this.selectedTopics.push({
+        topic: this.topicFormControl.value,
+        partition: this.partitionFormControl.value,
+      });
+    }
+  }
+
+  remove(index: number) {
+    this.selectedTopics = this.selectedTopics.filter((elem, i) => index != i);
   }
 }

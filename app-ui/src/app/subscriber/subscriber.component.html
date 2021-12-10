@@ -2,24 +2,77 @@
 <div class="search">
   <div>
     <mat-form-field>
-      <mat-label>Channel</mat-label>
-      <mat-select [formControl]="channelFormControl" [disabled]="isSubscribing">
-        <mat-option *ngFor="let channel of channels" [value]="channel">
-          {{channel}}
+      <mat-label>Subscriber</mat-label>
+      <mat-select
+        [formControl]="subscriberUrlFormControl"
+        [disabled]="isSubscribing"
+      >
+        <mat-option
+          *ngFor="let subscriber of subscriberMap | keyvalue"
+          [value]="subscriber.value"
+        >
+          {{ subscriber.key }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="toogleSubscribe()">
-      {{
-      isSubscribing ?
-      'Stop Listening' :
-      'Listen'
-      }}
-    </button>
+    <br />
+    <ng-container *ngFor="let selectedTopic of selectedTopics; let i = index">
+      <div class="selected">
+        Topic: {{ selectedTopic.topic }} | Partition:
+        {{ selectedTopic.partition }}
+        <button
+          mat-stroked-button
+          (click)="remove(i)"
+          [disabled]="isSubscribing"
+        >
+          x
+        </button>
+      </div>
+      <br />
+    </ng-container>
+    <ng-container>
+      <mat-form-field>
+        <mat-label>Topic</mat-label>
+        <mat-select [formControl]="topicFormControl" [disabled]="isSubscribing">
+          <mat-option *ngFor="let topic of topics" [value]="topic">
+            {{ topic }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      &nbsp;
+      <mat-form-field>
+        <mat-label>Partition</mat-label>
+        <mat-select
+          [formControl]="partitionFormControl"
+          [disabled]="isSubscribing"
+        >
+          <mat-option *ngFor="let partition of partitions" [value]="partition">
+            {{ partition }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="add()"
+        [disabled]="isSubscribing"
+      >
+        Add
+      </button>
+    </ng-container>
   </div>
+  <button mat-raised-button color="primary" (click)="toogleSubscribe()">
+    {{ isSubscribing ? "Stop Listening" : "Listen" }}
+  </button>
 </div>
 
 <div *ngFor="let news of newsList">
-  <app-news [title]="news?.title" [description]="news?.description" [image]="news.image" [url]="news?.url"
-    [publisherId]="news?.publisherId"></app-news>
+  <app-news
+    [title]="news?.title"
+    [description]="news?.description"
+    [image]="news.image"
+    [url]="news?.url"
+    [publisherId]="news?.publisherId"
+  ></app-news>
 </div>
